@@ -157,6 +157,8 @@ export async function getCountNewNotice(uid: string) {
 }
 
 export function sendPushNoti(toDeviceToken: string, msgBody: any) {
+  console.log('toDeviceToken===>', toDeviceToken, 'msgBody=>>>', msgBody)
+  const serverKey = import.meta.env.VITE_APP_serverKey
   httpClient.post(
     'https://fcm.googleapis.com/fcm/send',
     {
@@ -166,8 +168,7 @@ export function sendPushNoti(toDeviceToken: string, msgBody: any) {
     {
       headers: {
         'Content-Type': 'application/json',
-        Authorization:
-          'key=AAAAHKakbv4:APA91bFjOlcDu--AENU-qcdgSeM3kwpZGbPS3YfT612GUpGKwu3-jhDE0bmqi_UqnVhPove6z0U60rfNUFzMzsuAbzeKZykqf9CYS-dj4gRmMNc7SaabqkeSXcF8BgDgAmQigL1DR3B5',
+        Authorization: `key=${serverKey}`,
       },
     }
   )
