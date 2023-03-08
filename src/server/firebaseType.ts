@@ -1,3 +1,5 @@
+import { bonusTypeEnum } from '@app/page/Events/Add'
+
 export type User = {
   bankName?: string
   ldapAcc?: string
@@ -14,8 +16,15 @@ export type User = {
   count?: number
   photoURL?: string | null
   qrCodeURL?: string
+  groups?: string[]
+  receiveToken?: string
 }
-
+export type UserGroup = {
+  groupName: string
+  members: string[]
+  groupId: string
+  createUser: string
+}
 // export type PayHistory = {}
 
 export interface IEvent {
@@ -30,6 +39,11 @@ export interface IEvent {
   tip?: number
   totalAmount?: number
   isAllPaid?: boolean
+  bonusType?: bonusTypeEnum
+  note?: string
+  photoURL?: string
+  groupId?: string
+  groupName?: string
 }
 export interface IEventDetail {
   id?: string | null
@@ -41,14 +55,25 @@ export interface IEventDetail {
   amount?: number
   count?: number
   amountToPay?: number
+  isGuess?: boolean
+  note?: string
 }
 export interface INoti {
   id?: string
-  date: string
+  date: number
   content: string
   fromUid: string
   toUids: string[]
   userSeen: string[]
   eventId: string
-  isSeen?: boolean
+  type: 'DemandPayment' | 'PaymentNotice'
+}
+
+export interface ILastTimeCheckNoti {
+  uid: string
+  checkTime: number
+}
+
+export interface IAllowedEmail {
+  email: string[]
 }

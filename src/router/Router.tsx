@@ -6,8 +6,8 @@ import { userStatus, userStore } from '@app/stores/user'
 import { lazy, useEffect } from 'react'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { createBrowserRouter, Navigate, Outlet, useNavigate } from 'react-router-dom'
-import { auth } from '../server/firebase'
 
+import { auth } from '../server/firebase'
 
 interface PrivateRouteProps {
   Comp: () => JSX.Element
@@ -59,11 +59,17 @@ export default createBrowserRouter([
       },
       {
         path: 'profile',
-        element: (
-          <LayoutWithFooter>
-            <AppSuspense comp={lazy(() => import('@app/page/Profile'))} />
-          </LayoutWithFooter>
-        ),
+        element: <Outlet />,
+        children: [
+          {
+            path: ':userUid',
+            element: (
+              <LayoutWithFooter>
+                <AppSuspense comp={lazy(() => import('@app/page/Profile'))} />
+              </LayoutWithFooter>
+            ),
+          },
+        ],
       },
       {
         path: 'events',
@@ -79,11 +85,7 @@ export default createBrowserRouter([
           },
           {
             path: 'add',
-            element: (
-              <Layout>
-                <AppSuspense comp={lazy(() => import('@app/page/Events/Add'))} />
-              </Layout>
-            ),
+            element: <AppSuspense comp={lazy(() => import('@app/page/Events/Add'))} />,
           },
           {
             path: 'edit/:id',

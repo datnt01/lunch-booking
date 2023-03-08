@@ -1,9 +1,7 @@
-import { PAGES } from '@app/contants'
 import { getHomeData } from '@app/libs/api/home'
+import { formatMoney } from '@app/libs/functions'
 import { IEvent, IEventDetail } from '@app/server/firebaseType'
-import { setCurrentPage } from '@app/stores/footer'
-import { useAppSelector } from '@app/stores/hook'
-import { useAppDispatch } from '@app/stores/hook'
+import { useAppDispatch, useAppSelector } from '@app/stores/hook'
 import { userStore } from '@app/stores/user'
 import { Grid } from '@mui/material'
 import { Container } from '@mui/system'
@@ -15,16 +13,13 @@ export default function HomePage() {
   const dispatch = useAppDispatch()
 
   useEffect(() => {
-    dispatch(setCurrentPage(PAGES.HOME))
-
     getHomeData().then((e) => {
       setListEvent(e)
-      // console.log("aaa", e);
     })
   }, [dispatch])
 
   const [listEvent, setListEvent] = useState<any>()
-  // console.log('listEvent', listEvent)
+
   const css = `
     html {
       width: 100vw;
@@ -52,7 +47,6 @@ export default function HomePage() {
       font-weight: 700;
       font-size: 24px;
       line-height: 30px;
-
       color: #000000;
     }
     #userImg {
@@ -60,7 +54,6 @@ export default function HomePage() {
       height: auto;
       border-radius: 32px;
       float: right;
-
       filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
     }
     .box {
@@ -82,7 +75,7 @@ export default function HomePage() {
     .itemDetail {
       float: right;
       font-weight: 700;
-      font-size: 24px;
+      font-size: 20px;
       line-height: 30px;
     }
     .divider {
@@ -104,7 +97,7 @@ export default function HomePage() {
 
   const getTotalUnPaidAmount = () => {
     // let result = 0;
-    const result = listEvent.unPaidList.reduce((total: number, data: IEventDetail) => (total += data.amount || 0), 0)
+    const result = listEvent.unPaidList.reduce((total: number, data: IEventDetail) => (total += data.amountToPay || 0), 0)
     return Math.round(result)
   }
 
@@ -118,12 +111,14 @@ export default function HomePage() {
     <Container>
       <style>{css}</style>
       <Grid id="header" container direction="row" alignItems="center">
-        <Grid item xs={10}>
+        <Grid item xs={9}>
           <p id="hello">Xin chào</p>
-          <p id="username">{user?.name}</p>
+          <Link to={'/profile/' + user.uid}>
+            <p id="username">{user?.name}</p>
+          </Link>
         </Grid>
-        <Grid item xs={2}>
-          <Link to="/profile">
+        <Grid item xs={3}>
+          <Link to={'/profile/' + user.uid}>
             <img id="userImg" src={user?.photoURL || ''} alt="user_photo" referrerPolicy="no-referrer" />
           </Link>
         </Grid>
@@ -139,11 +134,11 @@ export default function HomePage() {
         </Grid>
         <Grid className="item box" item sm={3} sx={{ display: { xs: 'none', sm: 'block' }, maxWidth: { sm: '20vw', lg: '14vw' } }}>
           <p className="itemHeader">Cần trả</p>
-          <p className="itemDetail">{getTotalUnPaidAmount()}K</p>
+          <p className="itemDetail">{formatMoney(getTotalUnPaidAmount())} (K)</p>
         </Grid>
         <Grid className="item box" item sm={3} sx={{ display: { xs: 'none', sm: 'block' }, maxWidth: { sm: '20vw', lg: '14vw' } }}>
           <p className="itemHeader">Cần đòi</p>
-          <p className="itemDetail">{getTotalRequirePayment()}K</p>
+          <p className="itemDetail">{formatMoney(getTotalRequirePayment())} (K)</p>
         </Grid>
       </Grid>
       <Grid id="list" container direction="row" justifyContent="center" spacing={3} sx={{ marginLeft: { xs: '-12px', sm: '0' } }}>
@@ -159,16 +154,16 @@ export default function HomePage() {
                 <Link to={'/events/' + data.eventId} className="text-link">
                   {data.eventName}
                 </Link>
-                <span className="text-right">{data.amount}K VND</span>
+                <span className="text-right">{formatMoney(data.amountToPay)} K VND</span>
               </div>
             ))
           ) : (
-            <img src="/src/assets/paid_logo.webp" alt="paid" />
+            <img src="/paid.png" alt="paid" />
           )}
           <hr className="divider" />
           <div>
             <span className="text-bold">Tổng</span>
-            <span className="text-right">{getTotalUnPaidAmount()}K VND</span>
+            <span className="text-right">{formatMoney(getTotalUnPaidAmount())} K VND</span>
           </div>
         </Grid>
         <Grid className="item box" item xs={12} sm={6} sx={{ maxWidth: { sm: '43vw', lg: '29vw' } }}>
@@ -183,16 +178,16 @@ export default function HomePage() {
                 <Link to={'/events/' + data.id} className="text-link">
                   {data.eventName}
                 </Link>
-                <span className="text-right">{Math.round(data.totalAmount)}K VND</span>
+                <span className="text-right">{formatMoney(Math.round(data.totalAmount))} K VND</span>
               </div>
             ))
           ) : (
-            <img src="/src/assets/paid_logo.webp" alt="paid" />
+            <img src="/paid.png" alt="paid" />
           )}
           <hr className="divider" />
           <div>
             <span className="text-bold">Tổng</span>
-            <span className="text-right">{getTotalRequirePayment()}K VND</span>
+            <span className="text-right">{formatMoney(getTotalRequirePayment())} K VND</span>
           </div>
         </Grid>
       </Grid>

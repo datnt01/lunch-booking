@@ -3,5 +3,7 @@
 @tailwind utilities;
 
 body {
-  background: linear-gradient(180deg, rgba(202, 245, 177, 0.44) 0%, #8ad769 101.95%);
+  overflow-x: hidden;
+  background: linear-gradient(180deg, rgba(202, 245, 177, 0.44) 0%, #8ad769 101.95%) fixed;
+  background-size: cover;
 }
