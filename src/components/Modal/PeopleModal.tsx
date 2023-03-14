@@ -33,7 +33,6 @@ const style = {
 }
 
 function PeopleModal({ open, setOpen, handleSelectedMember, selectedListMember, selectedGroup, useSelectPeopleInGroup = false }: PropsType) {
-  const [allMembers, setAllMembers] = useState<IEventDetail[]>([])
   const [membersFilter, setMembersFilter] = useState<IEventDetail[]>([])
   const [allMembersInGroup, setAllMembersInGroup] = useState<IEventDetail[]>([])
   const [newMemberName, setNewMemberName] = useState<string>()
@@ -50,6 +49,7 @@ function PeopleModal({ open, setOpen, handleSelectedMember, selectedListMember, 
     }
     setSelectingMembers(tempMembers)
   }
+
   const handleAdd = () => {
     const formatSelectingMembers: IEventDetail[] = []
 
@@ -64,37 +64,26 @@ function PeopleModal({ open, setOpen, handleSelectedMember, selectedListMember, 
     handleSelectedMember(formatSelectingMembers)
     setOpen(false)
   }
-  const initialMemberInGroup = () => {
-    const tempMembers: IEventDetail[] = []
-    selectedGroup?.members.forEach((uid: string) => {
-      const member = allMembers.find((member: IEventDetail) => member.uid === uid)
-      if (member) {
-        tempMembers.push(member)
-      }
-    })
-    const allMemberAndOthers = [...tempMembers]
-    setAllMembersInGroup(allMemberAndOthers)
-    setMembersFilter(allMemberAndOthers)
-  }
+
   useEffect(() => {
-    getListUser().then((allMembers) => {
-      const allMemberAndOthers = [...allMembers, ...selectingMembers]
-      setAllMembers(allMemberAndOthers)
+    getListUser().then((res) => {
+      const allMemberRes = [...res, ...selectingMembers]
+      const tempMembers: IEventDetail[] = []
+      selectedGroup?.members.forEach((uid: string) => {
+        const member = allMemberRes.find((member: IEventDetail) => member.uid === uid)
+        if (member) {
+          tempMembers.push(member)
+        }
+      })
+      const allMemberAndOthers = [...tempMembers]
+      setAllMembersInGroup(allMemberAndOthers)
+      setMembersFilter(allMemberAndOthers)
     })
   }, [])
 
   useEffect(() => {
-    if (useSelectPeopleInGroup) {
-      initialMemberInGroup()
-    } else {
-      setAllMembersInGroup(allMembers)
-      setMembersFilter(allMembers)
-    }
-  }, [allMembers, selectedGroup, useSelectPeopleInGroup])
-
-  useEffect(() => {
     setSelectingMembers([...selectedListMember])
-    initialMemberInGroup()
+    // initialMemberInGroup()
     setNewMemberName('')
     setFilterText('')
   }, [open])
@@ -116,7 +105,8 @@ function PeopleModal({ open, setOpen, handleSelectedMember, selectedListMember, 
     tempListSelectingMember.push(newMember)
     tempListAllMember.push(newMember)
     setSelectingMembers(tempListSelectingMember)
-    setAllMembers(tempListAllMember)
+    setMembersFilter(tempListAllMember)
+    setAllMembersInGroup(tempListAllMember)
     setNewMemberName('')
   }
 
@@ -124,18 +114,21 @@ function PeopleModal({ open, setOpen, handleSelectedMember, selectedListMember, 
     const tempMember = _.cloneDeep(allMembersInGroup)
     const listMemberAfterDel = tempMember.filter((item) => item.uid !== uid)
     const filterListSelectingMember = selectingMembers.filter((item) => item.uid !== uid)
-    setAllMembers(listMemberAfterDel)
     setSelectingMembers(filterListSelectingMember)
+    setMembersFilter(listMemberAfterDel)
   }
+
   const handleFilter = (value: string) => {
     const tempAllMember = _.cloneDeep(allMembersInGroup)
     const listMemberFilter = value ? tempAllMember.filter((item) => item.name?.toLocaleLowerCase().includes(value.toLowerCase())) : tempAllMember
     setMembersFilter(listMemberFilter)
   }
+
   const handleSearch = (value: string) => {
     handleFilter(value)
     setFilterText(value)
   }
+
   return (
     <Modal open={open} onClose={handleOnClose} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
       <Box sx={style}>

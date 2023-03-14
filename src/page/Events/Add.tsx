@@ -316,7 +316,7 @@ function Add() {
   }
   const onChangeGroup = (_event: any, selectedGroupOption: any) => {
     if (!selectedGroupOption) {
-      setEventState({ ...eventState, groupId: '', groupName: '' })
+      // setEventState({ ...eventState, groupId: '', groupName: '' })
       return
     }
     const tempSelectedGroup = userGroupData?.find((item: UserGroup) => item.groupId === selectedGroupOption.value)
@@ -343,7 +343,7 @@ function Add() {
   }
 
   const handleCancelChangeGroup = () => {
-    setModalConfirmGroupData({ isOpen: false, groupId: '', groupName: '' })
+    setModalConfirmGroupData({ isOpen: false, groupId: eventState.groupId, groupName: eventState.groupName })
   }
   useEffect(() => {
     const bonus = calBonus(eventState.billAmount || 0, eventState.tip || 0, bonusType)
@@ -444,7 +444,7 @@ function Add() {
             />
           </Box>
           <Box className="mt-5">
-            <Typography variant="subtitle2" sx={{ color: isEmptyMembers ? '#E1251B' : '' }}>
+            <Typography variant="subtitle2" className={isEmptyMembers ? 'text-red-600' : ''}>
               Group
             </Typography>
             <Autocomplete
@@ -455,7 +455,7 @@ function Add() {
             />
           </Box>
           <Box className="flex items-center mt-3">
-            <Typography variant="subtitle2" sx={{ color: isEmptyMembers ? '#E1251B' : '' }}>
+            <Typography variant="subtitle2" className={isEmptyMembers ? 'text-red-600' : ''}>
               Thành viên
             </Typography>
             <span style={{ color: isEmptyMembers ? '#E1251B' : '' }}> &nbsp; {selectedListMember?.length || 0}</span>
@@ -477,7 +477,7 @@ function Add() {
               <TableContainer>
                 <Table stickyHeader>
                   <TableHead>
-                    <TableRow sx={{ border: 'none' }}>
+                    <TableRow className="border-none">
                       <TableCell style={{ minWidth: '20px' }}></TableCell>
                       <TableCell style={{ minWidth: '85px' }}>
                         <Typography variant="subtitle1">Đã trả</Typography>
@@ -583,13 +583,13 @@ function Add() {
             </>
           )}
 
-          <Typography variant="subtitle2" sx={{ marginTop: '20px' }}>
+          <Typography variant="subtitle2" className="mt-5">
             Người trả bill
           </Typography>
           <Box sx={{ flexGrow: 1 }} className="mt-2">
             <Grid container spacing={2}>
               <Grid item md={4} xs={5} style={{ display: 'flex', alignItems: 'center' }}>
-                <ButtonStyled sx={{ padding: '10px' }} variant="contained" onClick={handleAutoPickBillOwner} disabled={!selectedListMember.length}>
+                <ButtonStyled className="p-4" variant="contained" onClick={handleAutoPickBillOwner} disabled={!selectedListMember.length}>
                   <Typography>Auto Pick</Typography>
                 </ButtonStyled>
               </Grid>
@@ -630,11 +630,11 @@ function Add() {
               defaultValue={0}
               error={!eventState.billAmount}
             />
-            <ButtonStyled variant="contained" className="text-[14px] w-[140px]" sx={{ marginTop: '16px' }} onClick={handleShareBill}>
+            <ButtonStyled variant="contained" className="text-[14px] w-[140px] mt-4" onClick={handleShareBill}>
               Chia đều
             </ButtonStyled>
           </Box>
-          <Typography variant="subtitle2" sx={{ marginTop: '10px' }}>
+          <Typography variant="subtitle2" className="mt-1">
             Note
           </Typography>
           <TextareaAutosize
@@ -760,7 +760,7 @@ function Add() {
               </button>
               <Typography variant="h5">Khi chuyển group sẽ xóa thông tin thành viên bạn đã chọn. Bạn đã chắc chưa?</Typography>
               <Box className="flex mt-5 justify-center">
-                <Button onClick={handleConfirmGroupChange} variant="contained" sx={{ marginRight: '15px' }}>
+                <Button onClick={handleConfirmGroupChange} variant="contained" className="mr-4">
                   Chắc
                 </Button>
                 <Button onClick={handleCancelChangeGroup} variant="contained">
@@ -775,7 +775,7 @@ function Add() {
             onClose={handleCloseModalSuccess}
             anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
           >
-            <Alert onClose={handleCloseModalSuccess} severity="success" sx={{ width: '100%', backgroundColor: '#baf7c2' }}>
+            <Alert onClose={handleCloseModalSuccess} severity="success" className="w-full bg-green-600">
               <span className="font-bold"> {isEdit ? 'Cập nhật hoá đơn thành công!' : 'Tạo hoá đơn thành công!'} </span>
             </Alert>
           </Snackbar>
