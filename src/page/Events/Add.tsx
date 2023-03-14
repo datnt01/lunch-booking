@@ -41,7 +41,7 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker'
 import dayjs from 'dayjs'
 import _, { round } from 'lodash'
 import { useEffect, useMemo, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 
 const TextFieldStyled = styled(TextField)(({ theme }) => ({
   '& .MuiFormLabel-root': {
@@ -107,6 +107,7 @@ const sortListByPaidCount = (members: IEventDetail[]) => {
 function Add() {
   const loginUser = useAppSelector(userStore)
   const params = useParams()
+  const navigate = useNavigate()
   const listEventDetail = useAppSelector(listEventDetailStore)
   const listEvent = useAppSelector(listEventStore)
   const userInEvent = useMemo(() => listEventDetail.filter((event: IEventDetail) => event.eventId === params.id), [listEventDetail, params])
@@ -254,6 +255,7 @@ function Add() {
             setEventDetail(eventDetail)
           })
           await Promise.all(promises)
+          navigate(`/events/edit/${eventId}`)
           setOpenModalSuccess(true)
         }
       }

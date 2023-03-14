@@ -26,9 +26,9 @@ const style = {
   bgcolor: 'background.paper',
   border: '2px solid #000',
   boxShadow: 24,
-  overflowY: 'scroll',
+  // overflowY: 'scroll',
   height: '100%',
-  maxHeight: '100vh',
+  maxHeight: '88vh',
   p: '0 2rem',
 }
 
@@ -152,7 +152,9 @@ function PeopleModal({ open, setOpen, handleSelectedMember, selectedListMember, 
             </Button>
           </Box>
         </Box>
-        <NomarlSelectPeople selectingMembers={selectingMembers} handleClickRow={handleClickRow} dellMember={dellMember} allMembers={membersFilter} />
+        <Box className="overflow-auto md:h-[50vh] h-[35vh]">
+          <NomarlSelectPeople selectingMembers={selectingMembers} handleClickRow={handleClickRow} dellMember={dellMember} allMembers={membersFilter} />
+        </Box>
         <Typography variant="h5" sx={{ marginBottom: '10px' }}>
           Thêm người ngoài
         </Typography>

@@ -14,8 +14,8 @@ function NomarlSelectPeople({ selectingMembers, handleClickRow, dellMember, allM
       {allMembers?.map((item: IEventDetail) => (
         <Box className="flex w-full" key={item.uid}>
           <Box
-            className={`hover:cursor-pointer ${
-              selectingMembers.find((user) => item.uid === user.uid) ? 'bg-green-300' : 'bg-gray-200'
+            className={`hover:cursor-pointer border border-solid border-black ${
+              selectingMembers.find((user) => item.uid === user.uid) ? 'bg-green-300' : ''
             } p-3 rounded-lg mb-2 w-full`}
             onClick={() => handleClickRow(item)}
           >
