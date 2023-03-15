@@ -1,9 +1,8 @@
 import { getApp, getApps, initializeApp } from 'firebase/app'
 import { getAuth, GoogleAuthProvider } from 'firebase/auth'
 import { initializeFirestore } from 'firebase/firestore'
-import { getMessaging, getToken, onMessage } from 'firebase/messaging'
+import { getMessaging } from 'firebase/messaging'
 import { getStorage } from 'firebase/storage'
-import { useAuthState } from 'react-firebase-hooks/auth'
 
 const {
   VITE_APP_apiKey: apiKey,
@@ -13,7 +12,6 @@ const {
   VITE_APP_messagingSenderId: messagingSenderId,
   VITE_APP_appId: appId,
   VITE_APP_measurementId: measurementId,
-  VITE_APP_vapiKey: vapiKey,
 } = import.meta.env
 
 export const firebaseConfig = {

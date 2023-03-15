@@ -157,12 +157,16 @@ export async function getCountNewNotice(uid: string) {
 }
 
 export function sendPushNoti(toDeviceToken: string, msgBody: any) {
-  console.log('toDeviceToken===>', toDeviceToken, 'msgBody=>>>', msgBody)
   const serverKey = import.meta.env.VITE_APP_serverKey
   httpClient.post(
     'https://fcm.googleapis.com/fcm/send',
     {
-      notification: msgBody,
+      data: msgBody,
+      webpush: {
+        fcm_options: {
+          link: 'https://google.com',
+        },
+      },
       to: toDeviceToken,
     },
     {
