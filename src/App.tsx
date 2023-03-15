@@ -2,7 +2,7 @@ import theme from '@app/style/theme'
 import { ThemeProvider } from '@mui/material'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
-import { getToken, onMessage } from 'firebase/messaging'
+import { getToken } from 'firebase/messaging'
 import { useEffect } from 'react'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { RouterProvider } from 'react-router-dom'
@@ -57,13 +57,8 @@ function App() {
           console.log('cannot get token')
         }
       })
-      onMessage(messaging, (payload) => {
-        console.log('Message received. ', payload)
-        // ...
-      })
     }
   }, [dispatch, loggedInUser])
-
   return (
     <ThemeProvider theme={theme}>
       <LocalizationProvider dateAdapter={AdapterDayjs}>
